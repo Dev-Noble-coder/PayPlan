@@ -9,13 +9,13 @@
   --popover: #ffffff;
   --popover-foreground: #1b2520;
 
-  /* Primary Theme (Rich Green) */
-  --primary: #0b6e4f;
-  --primary-foreground: #ffffff;
-  --primary-hover: #095940;
-  --primary-press: #074532;
-  --primary-soft: #e6f2ec;
-  --primary-ring: #0b6e4f40;
+  /* Primary Theme (Lime) */
+  --primary: #c5f045;
+  --primary-foreground: #1b2520;
+  --primary-hover: #b8e635;
+  --primary-press: #a7d424;
+  --primary-soft: #f3fcd4;
+  --primary-ring: #c5f04540;
 
   /* Accent (Golden/Orange) */
   --accent: #e8a33d;
@@ -45,6 +45,10 @@
   --score-low: #b23a2a;
   --score-mid: #e8a33d;
   --score-high: #0b6e4f;
+
+  /* Custom App Colors */
+  --modal-bg: #010710;
+  --user-info-bg: #0C131D;
 }
 
 @theme inline {
@@ -86,36 +90,17 @@
   --color-score-mid: var(--score-mid);
   --color-score-high: var(--score-high);
 
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono);
-  --font-brand: var(--font-logo), system-ui, sans-serif;
+  --color-modal-bg: var(--modal-bg);
+  --color-user-info-bg: var(--user-info-bg);
+
+
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
-}
 
-/* Base custom form and button styles as per DESIGN guidelines */
-@layer components {
-  .form-control {
-    @apply h-[44px] px-3 bg-white border border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300;
-  }
-  .form-control:focus {
-    border-color: #7e91a2;
-    box-shadow: 0 0 0 3px rgba(126, 145, 162, 0.16);
-  }
-
-  .btn-primary {
-    @apply h-[48px] w-full rounded-full bg-primary text-white shadow-sm transition-all duration-300;
-  }
-  .btn-primary:hover {
-    @apply shadow-md;
-  }
-  .btn-primary:active {
-    @apply scale-[0.98];
-  }
 }
 
 /* Utilities */

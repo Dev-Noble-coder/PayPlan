@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useWebhooks } from '@/components/WebhookContext';
 import { ShieldCheck, CreditCard, Landmark, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function GuestCheckoutPage() {
   const { token } = useParams();
@@ -46,8 +47,10 @@ export default function GuestCheckoutPage() {
       email: 'segun@example.com',
       verified: true
     });
-    alert('Account created successfully! Redirecting to dashboard...');
-    window.location.href = '/dashboard';
+    toast.success('Account created successfully! Redirecting to dashboard...');
+    setTimeout(() => {
+      window.location.href = '/dashboard';
+    }, 1500);
   };
 
   return (
@@ -89,14 +92,14 @@ export default function GuestCheckoutPage() {
               <div className="flex gap-3">
                 <button 
                   onClick={() => setPaymentMethod('card')}
-                  className={`flex-1 p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${paymentMethod === 'card' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary/50'}`}
+                  className={`flex-1 p-4 rounded-3xl border flex flex-col items-center gap-2 transition-all ${paymentMethod === 'card' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary/50'}`}
                 >
                   <CreditCard size={24} />
                   <span className="text-sm font-semibold">Debit Card</span>
                 </button>
                 <button 
                   onClick={() => setPaymentMethod('bank')}
-                  className={`flex-1 p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${paymentMethod === 'bank' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary/50'}`}
+                  className={`flex-1 p-4 rounded-3xl border flex flex-col items-center gap-2 transition-all ${paymentMethod === 'bank' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary/50'}`}
                 >
                   <Landmark size={24} />
                   <span className="text-sm font-semibold">Transfer</span>
@@ -109,16 +112,16 @@ export default function GuestCheckoutPage() {
               <div className="space-y-4 mb-8">
                 <div>
                   <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Card Number</label>
-                  <input type="text" placeholder="0000 0000 0000 0000" className="form-control rounded-xl w-full" defaultValue="4532 0192 8832 9102" />
+                  <input type="text" placeholder="0000 0000 0000 0000" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" defaultValue="4532 0192 8832 9102" />
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Expiry</label>
-                    <input type="text" placeholder="MM/YY" className="form-control rounded-xl w-full" defaultValue="12/26" />
+                    <input type="text" placeholder="MM/YY" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" defaultValue="12/26" />
                   </div>
                   <div className="flex-1">
                     <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">CVV</label>
-                    <input type="password" placeholder="123" className="form-control rounded-xl w-full" defaultValue="123" />
+                    <input type="password" placeholder="123" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" defaultValue="123" />
                   </div>
                 </div>
               </div>
@@ -152,13 +155,13 @@ export default function GuestCheckoutPage() {
             <form onSubmit={handlePasswordSet} className="space-y-6">
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Email</label>
-                <input type="email" value="segun@example.com" readOnly className="form-control rounded-xl w-full bg-secondary text-muted-foreground border-transparent" />
+                <input type="email" value="segun@example.com" readOnly className="h-[44px] px-3 border-b border-gray-200 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full bg-transparent text-muted-foreground" />
               </div>
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Create Password</label>
-                <input type="password" required placeholder="Enter a secure password" className="form-control rounded-xl w-full" />
+                <input type="password" required placeholder="Enter a secure password" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" />
               </div>
-              <button type="submit" className="btn-primary mt-4 flex items-center justify-center gap-2">
+              <button type="submit" className="h-[48px] w-full rounded-full bg-primary text-primary-foreground transition-all duration-300 hover:bg-primary-hover active:scale-[0.98] mt-4 flex items-center justify-center gap-2">
                 Complete Setup <ArrowRight size={18} />
               </button>
             </form>
@@ -172,7 +175,7 @@ export default function GuestCheckoutPage() {
           <button 
             onClick={handlePayment} 
             disabled={isProcessing}
-            className="btn-primary relative overflow-hidden group"
+            className="h-[48px] w-full rounded-full bg-primary text-primary-foreground transition-all duration-300 hover:bg-primary-hover active:scale-[0.98] relative overflow-hidden group"
           >
             <span className={`transition-opacity duration-300 ${isProcessing ? 'opacity-0' : 'opacity-100'}`}>Pay ₦50,000</span>
             {isProcessing && (

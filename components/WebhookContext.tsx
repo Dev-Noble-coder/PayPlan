@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
 export interface WebhookEvent {
   id: string;
@@ -20,7 +20,7 @@ const WebhookContext = createContext<WebhookContextType | undefined>(undefined);
 export function WebhookProvider({ children }: { children: ReactNode }) {
   const [events, setEvents] = useState<WebhookEvent[]>([]);
 
-  const addEvent = (event: string, payload: any) => {
+  const addEvent = useCallback((event: string, payload: any) => {
     setEvents((prev) => [
       {
         id: Math.random().toString(36).substring(7),
@@ -30,9 +30,9 @@ export function WebhookProvider({ children }: { children: ReactNode }) {
       },
       ...prev,
     ]);
-  };
+  }, []);
 
-  const clearEvents = () => setEvents([]);
+  const clearEvents = useCallback(() => setEvents([]), []);
 
   return (
     <WebhookContext.Provider value={{ events, addEvent, clearEvents }}>
