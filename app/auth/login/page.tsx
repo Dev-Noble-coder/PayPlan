@@ -91,6 +91,14 @@ export default function LoginPage() {
 
         <div className="w-full  mx-auto mt-16 lg:mt-0">
           <div className="mb-10">
+            {/* Mobile Logo */}
+            <div className="flex items-center gap-2 text-foreground mb-8 lg:hidden">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                <span className="text-black font-extrabold text-lg leading-none">P</span>
+              </div>
+              <span className="font-bold text-xl tracking-tight">PayPlan</span>
+            </div>
+
             <h1 className="text-4xl font-bold text-foreground leading-[1.1] font-brand tracking-tight mb-3">
               Welcome back
             </h1>

@@ -62,7 +62,7 @@ export default function UsersPage() {
           <div className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold">{activeTab} List</h2>
-              <button className="px-4 py-2 bg-white text-black font-semibold text-sm rounded-md hover:bg-gray-200 transition-colors">
+              <button className="px-4 py-2 bg-white text-black font-semibold text-sm rounded-full hover:bg-gray-200 transition-colors">
                 Add User
               </button>
             </div>
@@ -165,11 +165,11 @@ export default function UsersPage() {
 
             {/* Action Buttons */}
             <div className="flex gap-4 w-full">
-              <button className="flex-1 flex items-center justify-center gap-2 bg-[#1A1F26] hover:bg-[#252B36] text-[#E0E2E6] py-2.5 rounded-lg text-sm font-medium transition-colors border border-gray-800">
+              <button className="flex-1 flex items-center justify-center gap-2 bg-[#1A1F26] hover:bg-[#252B36] text-[#E0E2E6] py-2.5 rounded-full text-sm font-medium transition-colors border border-gray-800">
                 <Heart size={16} className="text-[#FF3B30] fill-[#FF3B30]" />
                 2.4M total likes
               </button>
-              <button className="flex-1 bg-[#042F1C] hover:bg-[#053D24] text-[#00E576] py-2.5 rounded-lg text-sm font-medium transition-colors border border-[#00E576]/10">
+              <button className="flex-1 bg-[#042F1C] hover:bg-[#053D24] text-[#00E576] py-2.5 rounded-full text-sm font-medium transition-colors border border-[#00E576]/10">
                 Active
               </button>
             </div>

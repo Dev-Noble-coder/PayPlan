@@ -1,191 +1,136 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useWebhooks } from '@/components/WebhookContext';
-import { ShieldCheck, CreditCard, Landmark, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { toast } from 'sonner';
+import { Hexagon, Lock, CreditCard } from 'lucide-react';
+import Link from 'next/link';
 
-export default function GuestCheckoutPage() {
-  const { token } = useParams();
-  const { addEvent } = useWebhooks();
-  const [step, setStep] = useState<'checkout' | 'success' | 'onboarding'>('checkout');
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank'>('card');
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  useEffect(() => {
-    addEvent('page.viewed', { path: `/pay/${token}`, user_type: 'guest' });
-  }, [addEvent, token]);
-
-  const handlePayment = () => {
-    setIsProcessing(true);
-    addEvent('payment.initiated', { method: paymentMethod, amount: 50000 });
-    
-    // Simulate network request
-    setTimeout(() => {
-      setIsProcessing(false);
-      setStep('success');
-      
-      // Emit the webhook from Nomba integration
-      addEvent('subscription.activated', {
-        subscription_id: 'sub_01HXXXX',
-        status: 'active',
-        payment_token: token,
-      });
-
-      // Move to onboarding automatically after success
-      setTimeout(() => {
-        setStep('onboarding');
-      }, 2500);
-
-    }, 1500);
-  };
-
-  const handlePasswordSet = (e: React.FormEvent) => {
-    e.preventDefault();
-    addEvent('customer.created', {
-      email: 'segun@example.com',
-      verified: true
-    });
-    toast.success('Account created successfully! Redirecting to dashboard...');
-    setTimeout(() => {
-      window.location.href = '/dashboard';
-    }, 1500);
-  };
-
+export default function PayPage() {
   return (
-    <div className="flex flex-col min-h-full bg-white relative">
-      {/* Header */}
-      <header className="px-5 pt-8 pb-4 flex justify-between items-center bg-white border-b border-border sticky top-0 z-10">
-        <div className="font-brand font-bold text-xl tracking-tight text-primary">PayPlan</div>
-        <div className="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
-          <ShieldCheck size={14} /> Secure
+    <div className="min-h-screen bg-[#fbfaf7] flex items-center justify-center p-4 sm:p-8">
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
+        
+        {/* Left Side: Summary */}
+        <div className="bg-secondary/50 p-8 sm:p-12 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border">
+          <div className="flex flex-col gap-10">
+            {/* Logo */}
+            <div className="flex items-center gap-2 text-foreground">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                <span className="text-black font-extrabold text-lg leading-none">P</span>
+              </div>
+              <span className="font-bold text-2xl tracking-tight">PayPlan</span>
+            </div>
+
+            <div className="flex flex-col gap-6">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-1">You're invited to join</p>
+                <h1 className="text-3xl font-bold text-foreground">Rent Collection - January 2026</h1>
+              </div>
+
+              <div className="flex flex-col gap-4 text-sm mt-4">
+                <div className="flex justify-between border-b border-border/50 pb-4">
+                  <span className="text-muted-foreground">Amount</span>
+                  <div className="text-right">
+                    <span className="font-bold text-foreground block">₦100,000</span>
+                    <span className="text-xs text-muted-foreground">per month</span>
+                  </div>
+                </div>
+                <div className="flex justify-between border-b border-border/50 pb-4">
+                  <span className="text-muted-foreground">Frequency</span>
+                  <span className="font-medium text-foreground">Monthly</span>
+                </div>
+                <div className="flex justify-between border-b border-border/50 pb-4">
+                  <span className="text-muted-foreground">First Charge</span>
+                  <div className="text-right">
+                    <span className="font-bold text-foreground block">₦100,000</span>
+                    <span className="text-xs text-muted-foreground">on Jan 1, 2026</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 pt-2">
+                  <span className="text-xs text-muted-foreground">Payments go to</span>
+                  <span className="font-medium text-foreground">Landlord Chidi - Access Bank ••••1234</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 text-sm text-muted-foreground">
+            Need help? <a href="#" className="font-bold text-primary hover:underline">Contact the organizer.</a>
+          </div>
         </div>
-      </header>
 
-      {/* Main Form Content */}
-      <div className="flex-1 p-5 pb-24 overflow-y-auto">
-        {step === 'checkout' && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h1 className="text-2xl font-bold text-foreground mb-2">Complete Payment</h1>
-            <p className="text-muted-foreground text-sm mb-6">Tobi has requested a monthly rent mandate on PayPlan.</p>
+        {/* Right Side: Form */}
+        <div className="p-8 sm:p-12 flex flex-col justify-center">
+          <div className="flex flex-col gap-2 mb-8">
+            <h2 className="text-2xl font-bold text-foreground">Set up your payment</h2>
+            <p className="text-sm text-muted-foreground">Enter your card details to start automatic payments.</p>
+          </div>
 
-            {/* Bill Summary Card */}
-            <div className="bg-secondary/30 border border-border rounded-2xl p-5 mb-8">
-              <div className="flex justify-between mb-4">
-                <span className="text-sm font-medium text-muted-foreground">Amount Due</span>
-                <span className="text-sm font-medium text-foreground">₦50,000 / month</span>
-              </div>
-              <div className="flex justify-between mb-4">
-                <span className="text-sm font-medium text-muted-foreground">First Payment</span>
-                <span className="text-sm font-medium text-foreground">Today</span>
-              </div>
-              <div className="border-t border-border pt-4 flex justify-between items-center">
-                <span className="font-bold text-foreground">Total</span>
-                <span className="font-sans font-bold text-2xl text-foreground">₦50,000</span>
-              </div>
-            </div>
-
-            {/* Payment Methods */}
-            <div className="mb-8">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4">Payment Method</h3>
-              <div className="flex gap-3">
-                <button 
-                  onClick={() => setPaymentMethod('card')}
-                  className={`flex-1 p-4 rounded-3xl border flex flex-col items-center gap-2 transition-all ${paymentMethod === 'card' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary/50'}`}
-                >
-                  <CreditCard size={24} />
-                  <span className="text-sm font-semibold">Debit Card</span>
-                </button>
-                <button 
-                  onClick={() => setPaymentMethod('bank')}
-                  className={`flex-1 p-4 rounded-3xl border flex flex-col items-center gap-2 transition-all ${paymentMethod === 'bank' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary/50'}`}
-                >
-                  <Landmark size={24} />
-                  <span className="text-sm font-semibold">Transfer</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Simulated Card Form */}
-            {paymentMethod === 'card' && (
-              <div className="space-y-4 mb-8">
-                <div>
-                  <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Card Number</label>
-                  <input type="text" placeholder="0000 0000 0000 0000" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" defaultValue="4532 0192 8832 9102" />
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Expiry</label>
-                    <input type="text" placeholder="MM/YY" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" defaultValue="12/26" />
-                  </div>
-                  <div className="flex-1">
-                    <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">CVV</label>
-                    <input type="password" placeholder="123" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" defaultValue="123" />
+          <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+            <div className="flex flex-col gap-4">
+              <h3 className="text-sm font-bold text-foreground">Card Information</h3>
+              
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold text-muted-foreground">Card number</label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="4242 4242 4242 4242" 
+                      className="w-full pl-4 pr-12 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 font-mono text-sm"
+                    />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                      <div className="w-8 h-5 bg-blue-600 rounded flex items-center justify-center text-[8px] text-white font-bold italic">VISA</div>
+                      <div className="w-8 h-5 bg-gray-800 rounded flex items-center justify-center text-[8px] text-white font-bold">MC</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-            
-            {paymentMethod === 'bank' && (
-              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl mb-8">
-                <p className="text-sm text-blue-800">You will be redirected to Nomba to complete the secure transfer.</p>
-              </div>
-            )}
-          </div>
-        )}
 
-        {step === 'success' && (
-          <div className="flex flex-col items-center justify-center h-64 animate-in zoom-in duration-500">
-            <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
-              <CheckCircle2 size={40} />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-muted-foreground">Expiry date</label>
+                    <input 
+                      type="text" 
+                      placeholder="MM / YY" 
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 font-mono text-sm"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-muted-foreground">CVC</label>
+                    <input 
+                      type="text" 
+                      placeholder="123" 
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 font-mono text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold text-muted-foreground">Cardholder name</label>
+                  <input 
+                    type="text" 
+                    defaultValue="Alice Johnson"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                  />
+                </div>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Payment Successful!</h2>
-            <p className="text-muted-foreground text-center px-4">Your mandate has been activated. Processing next steps...</p>
-          </div>
-        )}
 
-        {step === 'onboarding' && (
-          <div className="animate-in fade-in slide-in-from-right-8 duration-500">
-            <div className="text-center mb-8">
-              <h2 className="text-[28px] leading-[1.2] font-bold text-foreground mb-3 max-w-[280px] mx-auto">Set your password to access your dashboard.</h2>
-              <p className="text-muted-foreground">We've saved your details. Create a password to manage this and future mandates.</p>
-            </div>
-
-            <form onSubmit={handlePasswordSet} className="space-y-6">
-              <div>
-                <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Email</label>
-                <input type="email" value="segun@example.com" readOnly className="h-[44px] px-3 border-b border-gray-200 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full bg-transparent text-muted-foreground" />
-              </div>
-              <div>
-                <label className="block text-[13px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Create Password</label>
-                <input type="password" required placeholder="Enter a secure password" className="h-[44px] px-3 bg-transparent border-b border-gray-200 text-gray-700 text-[15px] outline-none transition-all duration-300 focus:border-[#7e91a2] w-full" />
-              </div>
-              <button type="submit" className="h-[48px] w-full rounded-full bg-primary text-primary-foreground transition-all duration-300 hover:bg-primary-hover active:scale-[0.98] mt-4 flex items-center justify-center gap-2">
-                Complete Setup <ArrowRight size={18} />
+            <div className="flex flex-col gap-4 mt-4">
+              <button className="w-full py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all active:scale-[0.98] shadow-sm">
+                Authorize & Start Payments
               </button>
-            </form>
-          </div>
-        )}
-      </div>
+              
+              <p className="text-xs text-muted-foreground text-center px-4 leading-relaxed">
+                By continuing, you authorize PayPlan to charge your card ₦100,000 every month starting Jan 1, 2026.
+              </p>
+            </div>
+          </form>
 
-      {/* Floating Checkout Button */}
-      {step === 'checkout' && (
-        <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-white via-white to-transparent pt-12">
-          <button 
-            onClick={handlePayment} 
-            disabled={isProcessing}
-            className="h-[48px] w-full rounded-full bg-primary text-primary-foreground transition-all duration-300 hover:bg-primary-hover active:scale-[0.98] relative overflow-hidden group"
-          >
-            <span className={`transition-opacity duration-300 ${isProcessing ? 'opacity-0' : 'opacity-100'}`}>Pay ₦50,000</span>
-            {isProcessing && (
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-              </span>
-            )}
-          </button>
+          <div className="mt-8 flex items-center justify-center gap-2 text-xs text-muted-foreground font-medium">
+            <Lock size={14} className="text-success" />
+            Powered by <span className="font-bold text-foreground">Sub</span> (PCI DSS Compliant)
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
